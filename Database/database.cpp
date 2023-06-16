@@ -19,6 +19,12 @@ void create_tables(sqlite3 *db_p){
     sqlite3_exec(db_p, "CREATE TABLE OUTPUT(ID INT PRIMARY KEY, IPADDR CHAR(15), NETIPADDR CHAR(15), MAC CHAR(17), OUT TEXT)", 0, 0, &err);
 }
 
+bool badCommand(std::string &com){
+    if (com.size() != 6)
+        return true;
+    return false;
+}
+
 int main(){
     int serverSocket, clientSocket;
     struct sockaddr_in serverAddress, clientAddress;
@@ -68,6 +74,12 @@ int main(){
         buffer.insert(buffer.end(), recv_buffer, recv_buffer + bytesRead);
 
         std::string command(buffer.begin(), buffer.begin()+6);
+        
+        if (badCommand(command)){
+            close(clientSocket);
+            continue;
+        }
+
         const char *state = buffer.data();
 
         if (command == "SELECT") {

@@ -22,6 +22,12 @@ void checkOutput(int &socket_fd){
     read(socket_fd, buffer, 1024);
 }
 
+bool checkEq(char * a, char * b){
+    if (!strcmp(a, b))
+        return true;
+    return false;
+}
+
 int main(int argc, char* argv[]) {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
@@ -36,7 +42,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Доступные команды: clients" << std::endl << "Введите команду -> ";
     std::cin >> command;
 
-    if (!strcmp(command,"clients"))
+    if (checkEq(command, "clients"))
         getClients(sockfd);
 
     return 0;

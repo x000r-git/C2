@@ -4,7 +4,6 @@
 
 
 void Server::SetUpServer() {
-    // Creating socket
     server_socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket_ < 0){
         std::cerr << "Серверный сокет не создан. Ошибка.\n";
@@ -34,23 +33,14 @@ void Server::Run() {
     int64_t client_socket;
     socklen_t client_address_length;
     struct sockaddr_in client_address;
-    int countClients = 0;
 
     while ((client_socket = accept(server_socket_, (struct sockaddr *)&client_address, &client_address_length))) {
-        // HandleClientConnection(client_socket);
 
         pid_t pid = fork();
         if (pid == 0){
-            // Maybe here search IP-address and map secret keys
-            // In the child lol
             HandleClientConnection(client_socket);
             exit(0);
-        } else if (pid > 0 && countClients > 5){
-            // Parent
-            wait(NULL); // Now I have only one "thread". No multiple connections. Pity.
-            countClients = 0;
         }
-        countClients++;
     }
 }
 
@@ -79,7 +69,6 @@ void Server::HandleClientConnection(int64_t clientSocket){
     }
     
     client_message->Print();
-    // Closing client's socket
     delete client_message;
     close(clientSocket);
 }
