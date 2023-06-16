@@ -2,10 +2,16 @@
 #include <iomanip>
 #include <arpa/inet.h>
 
+/**
+ * Function parses MAC-address from protocol to string
+ * @param buffer Data
+ * @param offset Offset to MAC-address place
+ * @return MAC-address string
+ */
 std::string ParseMACAddress(const std::vector<uint8_t>& buffer, std::size_t offset) {
     std::string mac;
     static const char* digits = "0123456789ABCDEF";
-     if (offset + 6 >= buffer.size()) {
+     if (offset + 6 > buffer.size()) {
         throw std::string("MACAddress: lack buffer\n");
     }
 
@@ -20,6 +26,11 @@ std::string ParseMACAddress(const std::vector<uint8_t>& buffer, std::size_t offs
     return mac;
 }
 
+/**
+ * Function parses input message and creates MessageClient structure
+ * @param buffer
+ * @return 0 if OK
+ */
 int64_t MessageClient::Deserialization(const std::vector<uint8_t>& buffer) {
     try {
         uint32_t magic_number = *reinterpret_cast<const uint32_t*>(&buffer[0]);
@@ -41,6 +52,11 @@ int64_t MessageClient::Deserialization(const std::vector<uint8_t>& buffer) {
     return 0;
 }
 
+/**
+ * Function serializing message to client
+ * @param buffer
+ * @return 0 if OK
+ */
 int64_t MessageServer::Serialization(std::vector<uint8_t>& buffer) {
     buffer.resize(4 + sizeof(this->command) + sizeof(this->data_size_));
     *reinterpret_cast<uint32_t *>(&buffer[0]) = 0x42324232;
@@ -50,6 +66,9 @@ int64_t MessageServer::Serialization(std::vector<uint8_t>& buffer) {
     return 0;
 }
 
+/**
+ * Function prints command
+ */
 void MessageClient::Print() {
     std::cout << this->local_ipv4_ << "\n";
     std::cout << this->mac_address_ << "\n";

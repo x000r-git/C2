@@ -1,6 +1,8 @@
 #include "Client.h"
 
-
+/**
+ * Main function that starts client program
+ */
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     uint32_t port = 2023;

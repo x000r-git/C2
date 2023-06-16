@@ -5,7 +5,9 @@
 #include <sys/wait.h>
 #include "message.h"
 
-
+/**
+ * Server class
+ */
 class Server {
 public:
     Server() : server_port_(2023), backlog_(5), buffer_size_(1024) {}

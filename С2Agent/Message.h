@@ -13,7 +13,6 @@
 #include <Iphlpapi.h>
 #include <sstream>
 #include <Assert.h>
-// Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
 #pragma comment(lib, "iphlpapi.lib")
 #pragma comment (lib, "Ws2_32.lib")
 #pragma comment (lib, "Mswsock.lib")
@@ -21,7 +20,9 @@
 
 #include "../config.h"
 
-
+/**
+ * Class for Message from Server
+ */
 class MessageServer {
 public:
 
@@ -37,7 +38,9 @@ private:
     std::vector<uint8_t> data;
 };
 
-
+/**
+ * Class for message from Client
+ */
 class MessageClient {
 public:
 

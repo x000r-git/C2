@@ -1,6 +1,9 @@
 #pragma once
 #include "Message.h"
 
+/**
+ * Client struct
+ */
 class Client {
 public:
 	Client() : port_(2023), ipv4_("192.168.187.128") {}

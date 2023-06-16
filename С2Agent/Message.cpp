@@ -2,6 +2,12 @@
 
 #include "Message.h"
 
+/**
+ * Function that serializes MAC to uint
+ * @param s MAC-address string
+ * @param bytes In which bytes we place serialized MAC
+ * @return 0 if OK
+ */
 uint64_t FromMACAddressToUint64(std::string const& s, char* bytes) {
     unsigned char a[6];
     int last = -1;
@@ -15,6 +21,11 @@ uint64_t FromMACAddressToUint64(std::string const& s, char* bytes) {
     return 0;
 }
 
+/**
+ * Function for serialization
+ * @param buffer  buffer to use in serialize
+ * @return 0 if OK
+ */
 int64_t MessageClient::Serialization(std::vector<uint8_t>& buffer) {
     buffer.resize(4 + 4 + 6 + sizeof(this->command_) + sizeof(this->data_size_));
     *reinterpret_cast<uint32_t*>(&buffer[0]) = 0x43324332;
@@ -29,7 +40,11 @@ int64_t MessageClient::Serialization(std::vector<uint8_t>& buffer) {
     return 0;
 }
 
-
+/**
+ * Function for deserialization
+ * @param buffer  buffer to use in deserialize
+ * @return 0 if OK
+ */
 int64_t MessageServer::Deserialization(const std::vector<uint8_t>& buffer) {
     try {
         uint32_t magic_number = *reinterpret_cast<const uint32_t*>(&buffer[0]);

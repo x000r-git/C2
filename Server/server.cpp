@@ -2,7 +2,9 @@
 
 // MSYS COMMANDS: export PATH=$PATH:/mingw64/bin/; g++ client.cpp -lwsock32
 
-
+/**
+ * Function that set ups and starts server
+ */
 void Server::SetUpServer() {
     server_socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (server_socket_ < 0){
@@ -10,7 +12,6 @@ void Server::SetUpServer() {
         return;
     }
 
-    // Binding server
     server_address_.sin_family = AF_INET;
     server_address_.sin_addr.s_addr = INADDR_ANY;
     server_address_.sin_port = htons(server_port_);
@@ -20,7 +21,6 @@ void Server::SetUpServer() {
         return ;
     }
 
-    // Set listen mod
     if (listen(server_socket_, 5) < 0){
         std::cerr << "Прослушивание не запущено. Ошибка.\n";
         return;
@@ -29,6 +29,9 @@ void Server::SetUpServer() {
     std::cout << "Server created\n";
 }
 
+/**
+ * Function Starts listening for clients connections
+ */
 void Server::Run() {
     int64_t client_socket;
     socklen_t client_address_length;
@@ -44,11 +47,18 @@ void Server::Run() {
     }
 }
 
+/**
+ * Function stops server
+ */
 void Server::Stop() {
     std::cout << "Server stopped\n";
     close(server_socket_);
 }
 
+/**
+ * Function works with clients messages
+ * @param clientSocket
+ */
 void Server::HandleClientConnection(int64_t clientSocket){
     std::cout << "New connection\n";
     ssize_t bytes_read;

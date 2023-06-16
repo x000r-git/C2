@@ -3,7 +3,9 @@
 
 #include "../config.h"
 
-
+/**
+ * Class for message from Server
+ */
 class MessageServer {
 public:
     int64_t Serialization(std::vector<uint8_t>& buffer);
@@ -13,7 +15,9 @@ private:
     std::vector<uint8_t> data;
 };
 
-
+/**
+ * Class for message from Client
+ */
 class MessageClient {
 public:
     MessageClient() = default;
